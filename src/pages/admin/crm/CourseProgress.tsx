@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { BookOpen, Users, Clock, Award } from 'lucide-react';
+import { BookOpen, Users, Clock, Award, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface CourseProgress {
   course: {
@@ -15,6 +16,7 @@ interface CourseProgress {
 }
 
 export default function CourseProgress() {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<CourseProgress[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,50 +77,40 @@ export default function CourseProgress() {
           {courses.map(({ course, total_enrollments, avg_progress, completion_rate }) => (
             <div
               key={course.id}
-              className="border rounded-lg p-4 hover:bg-gray-50"
+              className="border rounded-lg p-4 hover:bg-gray-50 flex items-center justify-between"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="font-medium">{course.title}</h3>
-                  <span className={`
-                    inline-block mt-1 px-2 py-1 text-xs rounded-full
-                    ${course.level === 'beginner' ? 'bg-green-100 text-green-800' : ''}
-                    ${course.level === 'intermediate' ? 'bg-yellow-100 text-yellow-800' : ''}
-                    ${course.level === 'advanced' ? 'bg-red-100 text-red-800' : ''}
-                  `}>
-                    {course.level}
+              <div>
+                <h3 className="font-medium">{course.title}</h3>
+                <span className={`
+                  inline-block mt-1 px-2 py-1 text-xs rounded-full
+                  ${course.level === 'beginner' ? 'bg-green-100 text-green-800' : ''}
+                  ${course.level === 'intermediate' ? 'bg-yellow-100 text-yellow-800' : ''}
+                  ${course.level === 'advanced' ? 'bg-red-100 text-red-800' : ''}
+                `}>
+                  {course.level}
+                </span>
+                <div className="mt-2 text-sm text-gray-500 space-x-4">
+                  <span className="flex items-center">
+                    <Users className="w-4 h-4 mr-1" />
+                    {total_enrollments} enrolled
+                  </span>
+                  <span className="flex items-center">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {course.duration} mins
+                  </span>
+                  <span className="flex items-center">
+                    <Award className="w-4 h-4 mr-1" />
+                    {Math.round(completion_rate)}% completed
                   </span>
                 </div>
-                <BookOpen className="w-5 h-5 text-gray-400" />
               </div>
-
-              <div className="grid grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-gray-400" />
-                  <span>{total_enrollments} enrolled</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-gray-400" />
-                  <span>{course.duration} minutes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Award className="w-4 h-4 text-gray-400" />
-                  <span>{Math.round(completion_rate)}% completed</span>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-1">
-                  <span>Average Progress</span>
-                  <span>{Math.round(avg_progress)}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full"
-                    style={{ width: `${avg_progress}%` }}
-                  ></div>
-                </div>
-              </div>
+              <button
+                onClick={() => navigate(`/admin/courses/${course.id}/details`)}
+                className="flex items-center text-blue-600 hover:text-blue-700"
+              >
+                View Details
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
             </div>
           ))}
         </div>

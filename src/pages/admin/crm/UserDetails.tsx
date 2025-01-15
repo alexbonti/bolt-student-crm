@@ -1,33 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format, isValid } from 'date-fns';
-import { MapPin, Globe, Linkedin, Github, Twitter, BookOpen, Clock, Award } from 'lucide-react';
+import { MapPin, Globe, Linkedin, Github, Twitter, BookOpen, Clock, Award, Plus } from 'lucide-react';
 import type { User } from '../../../types/crm';
+import CourseAssignmentDialog from './CourseAssignmentDialog';
 
 interface UserDetailsProps {
   user: User;
 }
 
 export default function UserDetails({ user }: UserDetailsProps) {
+  const [showCourseAssignment, setShowCourseAssignment] = useState(false);
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center mb-6">
-        <img
-          src={user.avatar_url || 'https://via.placeholder.com/100'}
-          alt={user.full_name}
-          className="w-20 h-20 rounded-full mr-4"
-        />
-        <div>
-          <h2 className="text-2xl font-semibold">{user.full_name}</h2>
-          {user.headline && (
-            <p className="text-gray-600 mt-1">{user.headline}</p>
-          )}
-          {user.location && (
-            <p className="flex items-center text-gray-600 mt-1">
-              <MapPin className="w-4 h-4 mr-1" />
-              {user.location}
-            </p>
-          )}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <img
+            src={user.avatar_url || 'https://via.placeholder.com/100'}
+            alt={user.full_name}
+            className="w-20 h-20 rounded-full mr-4"
+          />
+          <div>
+            <h2 className="text-2xl font-semibold">{user.full_name}</h2>
+            {user.headline && (
+              <p className="text-gray-600 mt-1">{user.headline}</p>
+            )}
+            {user.location && (
+              <p className="flex items-center text-gray-600 mt-1">
+                <MapPin className="w-4 h-4 mr-1" />
+                {user.location}
+              </p>
+            )}
+          </div>
         </div>
+        <button
+          onClick={() => setShowCourseAssignment(true)}
+          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Assign Course
+        </button>
       </div>
 
       <div className="flex items-center space-x-4 mb-6">
@@ -120,6 +132,13 @@ export default function UserDetails({ user }: UserDetailsProps) {
           <p className="text-gray-500">No meetups attended yet.</p>
         )}
       </div>
+
+      {showCourseAssignment && (
+        <CourseAssignmentDialog
+          user={user}
+          onClose={() => setShowCourseAssignment(false)}
+        />
+      )}
     </div>
   );
 }
