@@ -15,13 +15,14 @@ import ModuleView from './pages/ModuleView';
 import MyLearning from './pages/MyLearning';
 import AdminDashboard from './pages/AdminDashboard';
 import ModuleEditor from './pages/admin/ModuleEditor';
+import CourseDetailsAdmin from './pages/admin/crm/CourseDetails';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
+        <Navigation />
         <div className="min-h-screen bg-gray-50">
-          <Navigation />
           <main className="container mx-auto px-4 py-8">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -59,6 +60,11 @@ function App() {
               <Route path="/admin/courses/:courseId/modules/:moduleId" element={
                 <ProtectedRoute adminOnly>
                   <ModuleEditor />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/courses/:id/details" element={
+                <ProtectedRoute adminOnly>
+                  <CourseDetailsAdmin />
                 </ProtectedRoute>
               } />
             </Routes>
