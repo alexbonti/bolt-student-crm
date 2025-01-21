@@ -1,4 +1,4 @@
-			import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
       import { useNavigate, useParams } from 'react-router-dom';
       import { supabase } from '../../lib/supabase';
       import { Play, FileText, Image as ImageIcon, HelpCircle, Plus, Trash2, ArrowLeft, Save, AlertCircle, Check } from 'lucide-react';
